@@ -13,3 +13,17 @@ plt.title('Top 20 Feature Importances - Random Forest')
 plt.tight_layout()
 plt.savefig(os.path.join(OUTPUT_DIR, 'feature_importance.png'))
 plt.close()
+
+# Save the best model
+model_path = os.path.join(OUTPUT_DIR, 'best_model_rf.joblib')
+joblib.dump(best_rf, model_path)
+print("Saved best model to:", moodel_path)
+
+# Same evaluation summary to CSV
+summary = {
+  'model': ['LogisticRegression', 'RandomForest', 'RandomForest_GridSearch' + ('_XGBoost' if xgb_available else '')],
+    'notes': ['balanced logistic', 'baseline RF', 'tuned rf']
+}
+pd.DataFrame(summary).to_csv(os.path.join(OUTPUT_DIR, 'model_summary.csv'), index=False)
+
+print("Project completed. Check outputs folder for plots and model.")
