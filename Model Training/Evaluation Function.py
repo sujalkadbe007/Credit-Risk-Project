@@ -23,3 +23,19 @@ def eval_model(y_true, y_pred, y_proba, name):
   plt.close()
   
   # ROC Curve
+  fpr, tpr, _ = roc_curve(y_true, y_proba)
+  plt.figure(figsize=(6,4))
+  plt.plot(fpr, tpr, label=f'{name} (AUC = {roc:.3f})')
+  plt.plot([0,1],[0,1], linestyle='--', color='grey')
+  plt.xlabel('False Positive Rate')
+  plt.ylabel('True Positive Rate')
+  plt.title(f'ROC Curve - {name}')
+  plt.legend()
+  plt.savefig(os.path.join(OUTPUT_DIR, f'roc_{name}.png'))
+  plt.close()
+  
+  # Evaluate models
+  eval_model(y_test, lr_pred, lr_proba, 'LogisticRegression')
+  eval_model(y_test, rf_pred, rf_proba, 'RandomForest')
+  if xgb_availabe:
+    eval_model(y_test, xgb_pred, xgb_proba, 'XGBoost')
